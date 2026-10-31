@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملاحظاتي — مساحة آمنة لأفكارك</title>
+  <meta name="description" content="ملاحظاتي: مساحة شخصية أنيقة لتنظيم أفكارك وملاحظاتك، مع مزامنة سحابية آمنة وعزل كامل لكل مستخدم.">
+  <meta name="theme-color" content="#0B101B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('molahzati.v1.theme');
+        if (!saved) saved = 'system';
+        if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-booting">
+  <noscript>
+    <div class="noscript">يحتاج موقع ملاحظاتي إلى تفعيل JavaScript للعمل بشكل صحيح.</div>
+  </noscript>
+
+  <!-- Boot -->
+  <div class="boot-screen" id="bootScreen" aria-hidden="true">
+    <div class="boot-inner">
+      <span class="brand-mark brand-mark--lg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15.5 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 3Z"/>
+          <path d="M15 3v5h5"/><path d="M8 13h6M8 17h4"/>
+        </svg>
+      </span>
+      <span class="boot-name">ملاحظاتي</span>
+      <span class="boot-bar"><span></span></span>
+    </div>
+  </div>
+
+  <!-- Authentication -->
+  <main class="auth" id="authView" hidden>
+    <section class="auth-panel auth-panel--form">
+      <button class="icon-btn auth-theme-btn" id="authThemeBtn" type="button" aria-label="تبديل المظهر">
+        <span class="icon" data-icon="moon"></span>
+      </button>
+
+      <div class="auth-form-wrap">
+        <div class="auth-mobile-brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15.5 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 3Z"/>
+              <path d="M15 3v5h5"/><path d="M8 13h6M8 17h4"/>
+            </svg>
+          </span>
+          <span class="brand-name">ملاحظاتي</span>
+          <span class="auth-mobile-chip"><span class="icon" data-icon="lock"></span> سحابي آمن</span>
+        </div>
+
+        <header class="auth-head">
+          <span class="eyebrow"><span class="eyebrow-dot"></span> مساحتك الشخصية</span>
+          <h2 id="authHeading">مرحبًا بعودتك</h2>
+          <p id="authSubheading">سجّل الدخول للوصول إلى مساحة ملاحظاتك الخاصة.</p>
+        </header>
+
+        <div class="auth-tabs" role="tablist" aria-label="دخول أو إنشاء حساب">
+          <button class="auth-tab is-active" type="button" role="tab" aria-selected="true" data-auth-tab="login">تسجيل الدخول</button>
+          <button class="auth-tab" type="button" role="tab" aria-selected="false" data-auth-tab="register">إنشاء حساب</button>
+          <span class="auth-tab-thumb" aria-hidden="true"></span>
+        </div>
+
+        <form class="auth-form" id="loginForm" novalidate>
+          <label class="field">
+            <span class="field-label">البريد الإلكتروني</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="mail"></span>
+              <input type="email" id="loginEmail" name="email" autocomplete="username" inputmode="email" placeholder="name@example.com" dir="ltr" required>
+            </span>
+            <span class="field-error" data-error-for="loginEmail"></span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">كلمة المرور</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="lock"></span>
+              <input type="password" id="loginPassword" name="password" autocomplete="current-password" placeholder="••••••••" required>
+              <button class="field-action" type="button" data-reveal="loginPassword" aria-label="إظهار كلمة المرور">
+                <span class="icon" data-icon="eye"></span>
+              </button>
+            </span>
+            <span class="field-error" data-error-for="loginPassword"></span>
+          </label>
+
+          <div class="auth-form-meta">
+            <span class="secure-hint"><span class="icon" data-icon="shield"></span> اتصال مشفّر وجلسة محمية</span>
+          </div>
+
+          <div class="auth-alert" id="loginAlert" role="alert" hidden></div>
+
+          <button class="btn btn-primary btn-auth" id="loginSubmit" type="submit">
+            <span class="btn-label">دخول إلى ملاحظاتي</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <form class="auth-form" id="registerForm" novalidate hidden>
+          <label class="field">
+            <span class="field-label">الاسم الكامل</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="user"></span>
+              <input type="text" id="registerName" name="name" autocomplete="name" placeholder="مثال: سارة أحمد" maxlength="60" required>
+            </span>
+            <span class="field-error" data-error-for="registerName"></span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">البريد الإلكتروني</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="mail"></span>
+              <input type="email" id="registerEmail" name="email" autocomplete="username" inputmode="email" placeholder="name@example.com" dir="ltr" required>
+            </span>
+            <span class="field-error" data-error-for="registerEmail"></span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">كلمة المرور</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="lock"></span>
+              <input type="password" id="registerPassword" name="password" autocomplete="new-password" placeholder="8 أحرف على الأقل" required>
+              <button class="field-action" type="button" data-reveal="registerPassword" aria-label="إظهار كلمة المرور">
+                <span class="icon" data-icon="eye"></span>
+              </button>
+            </span>
+            <span class="password-strength" id="passwordStrength" hidden>
+              <span class="strength-bars"><i></i><i></i><i></i><i></i></span>
+              <span class="strength-label">قوة كلمة المرور</span>
+            </span>
+            <span class="field-error" data-error-for="registerPassword"></span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">تأكيد كلمة المرور</span>
+            <span class="field-control">
+              <span class="field-icon icon" data-icon="lock"></span>
+              <input type="password" id="registerConfirm" name="confirm" autocomplete="new-password" placeholder="أعد كتابة كلمة المرور" required>
+              <button class="field-action" type="button" data-reveal="registerConfirm" aria-label="إظهار كلمة المرور">
+                <span class="icon" data-icon="eye"></span>
+              </button>
+            </span>
+            <span class="field-error" data-error-for="registerConfirm"></span>
+          </label>
+
+          <div class="auth-alert" id="registerAlert" role="alert" hidden></div>
+
+          <p class="auth-consent">بإنشائك الحساب، تُخزَّن ملاحظاتك في حسابك السحابي الخاص، ولا يستطيع أي مستخدم آخر الوصول إليها.</p>
+
+          <button class="btn btn-primary btn-auth" id="registerSubmit" type="submit">
+            <span class="btn-label">إنشاء مساحتي الخاصة</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <div class="auth-local-note">
+          <span class="auth-local-icon icon" data-icon="shield-check"></span>
+          <div>
+            <strong>خصوصية بالتصميم</strong>
+            <p>تتم المصادقة عبر Supabase Auth، ولا تُخزَّن كلمة المرور في التطبيق. كل مستخدم يصل إلى ملاحظاته وحدها عبر سياسات عزل آمنة.</p>
+          </div>
+        </div>
+
+        <footer class="auth-footer">
+          <span>© 2026 ملاحظاتي</span>
+          <span class="footer-dot"></span>
+          <span>صُنع للعقول الفضولية</span>
+        </footer>
+      </div>
+    </section>
+
+    <aside class="auth-panel auth-panel--brand">
+      <div class="brand-glow brand-glow--one"></div>
+      <div class="brand-glow brand-glow--two"></div>
+      <div class="auth-brand-inner">
+        <div class="auth-brand-top">
+          <span class="brand-mark brand-mark--glass">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15.5 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 3Z"/>
+              <path d="M15 3v5h5"/><path d="M8 13h6M8 17h4"/>
+            </svg>
+          </span>
+          <span class="brand-name brand-name--light">ملاحظاتي</span>
+          <span class="brand-version">مساحة أفكارك</span>
+        </div>
+
+        <div class="auth-brand-copy">
+          <span class="brand-chip"><span class="icon" data-icon="sparkles"></span> مساحة أفكار سحابية</span>
+          <h1>أفكارك تستحق<br><span class="brand-gradient-text">مكانًا آمنًا.</span></h1>
+          <p>مساحة شخصية أنيقة لتنظيم ملاحظاتك وأفكارك ومشاريعك — بخصوصية وعزل كاملين، وبلا فوضى.</p>
+
+          <ul class="brand-features">
+            <li>
+              <span class="feature-icon icon" data-icon="users"></span>
+              <div><strong>مساحة معزولة لكل مستخدم</strong><span>بياناتك لا تختلط مع بيانات أي شخص آخر.</span></div>
+            </li>
+            <li>
+              <span class="feature-icon icon" data-icon="lock"></span>
+              <div><strong>حماية سحابية على Supabase</strong><span>تشفير أثناء النقل، وعزل صفوف لكل مستخدم.</span></div>
+            </li>
+            <li>
+              <span class="feature-icon icon" data-icon="bolt"></span>
+              <div><strong>سرعة وتركيز</strong><span>بحث فوري، وسوم، وتنظيم يناسب إيقاعك.</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="auth-visual" aria-hidden="true">
+          <div class="visual-card visual-card--main">
+            <div class="visual-card-top">
+              <span class="mini-tag"><span class="mini-tag-dot"></span> استراتيجية</span>
+              <span class="visual-pin icon" data-icon="pin"></span>
+            </div>
+            <h3>خطة إطلاق المنتج</h3>
+            <div class="visual-lines">
+              <span style="width: 92%"></span>
+              <span style="width: 74%"></span>
+              <span style="width: 84%"></span>
+              <span style="width: 55%"></span>
+            </div>
+            <div class="visual-card-foot">
+              <span>آخر تحديث: اليوم</span>
+              <span class="mini-avatars"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+          <div class="visual-card visual-card--side">
+            <span class="mini-tag mini-tag--rose">فكرة اليوم</span>
+            <p>«البساطة هي أعلى درجات التطوّر.»</p>
+            <span class="visual-metadata">دفتر الأفكار</span>
+          </div>
+          <div class="visual-chip visual-chip--save">
+            <span class="status-dot"></span> محفوظ في السحابة
+          </div>
+          <div class="visual-chip visual-chip--lock">
+            <span class="icon" data-icon="shield-check"></span> عزل على مستوى الصفوف
+          </div>
+        </div>
+
+        <footer class="auth-brand-footer">
+          <span><span class="icon" data-icon="lock"></span> TLS + RLS</span>
+          <span class="footer-dot footer-dot--light"></span>
+          <span>بياناتك تبقى ملكك</span>
+        </footer>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Workspace -->
+  <div class="app" id="appView" hidden>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="التنقل الرئيسي">
+      <div class="sidebar-head">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15.5 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 3Z"/>
+              <path d="M15 3v5h5"/><path d="M8 13h6M8 17h4"/>
+            </svg>
+          </span>
+          <span class="brand-name brand-name--light">ملاحظاتي</span>
+        </div>
+        <span class="secure-badge"><span class="icon" data-icon="lock"></span> سحابي آمن</span>
+      </div>
+
+      <button class="btn btn-create" id="newNoteBtn" type="button">
+        <span class="icon" data-icon="plus"></span>
+        <span>ملاحظة جديدة</span>
+        <kbd>N</kbd>
+      </button>
+
+      <nav class="sidebar-nav">
+        <span class="sidebar-label">مساحة العمل</span>
+        <button class="nav-item is-active" type="button" data-filter="all">
+          <span class="icon" data-icon="notes"></span>
+          <span class="nav-text">جميع الملاحظات</span>
+          <span class="nav-count" data-count="all">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="pinned">
+          <span class="icon" data-icon="pin"></span>
+          <span class="nav-text">المثبّتة</span>
+          <span class="nav-count" data-count="pinned">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="favorites">
+          <span class="icon" data-icon="star"></span>
+          <span class="nav-text">المفضّلة</span>
+          <span class="nav-count" data-count="favorites">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="archived">
+          <span class="icon" data-icon="archive"></span>
+          <span class="nav-text">الأرشيف</span>
+          <span class="nav-count" data-count="archived">0</span>
+        </button>
+        <button class="nav-item" type="button" data-filter="trash">
+          <span class="icon" data-icon="trash"></span>
+          <span class="nav-text">سلة المهملات</span>
+          <span class="nav-count" data-count="trash">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-tags">
+        <div class="sidebar-label-row">
+          <span class="sidebar-label">الوسوم</span>
+          <span class="tags-total" id="tagsTotal">0</span>
+        </div>
+        <div class="tag-list" id="tagList"></div>
+        <p class="tags-empty" id="tagsEmpty">ستظهر وسومك هنا بعد إضافتها للملاحظات.</p>
+      </div>
+
+      <div class="sidebar-foot">
+        <div class="sidebar-security">
+          <span class="icon" data-icon="shield-check"></span>
+          <div><strong>مخزّنة في حسابك</strong><span>عزل آمن عبر Supabase</span></div>
+        </div>
+
+        <div class="user-card">
+          <button class="user-main" id="userMenuBtn" type="button" aria-label="فتح الإعدادات">
+            <span class="avatar" id="userAvatar">م</span>
+            <span class="user-meta">
+              <strong id="userName">مستخدم</strong>
+              <span id="userEmail" dir="ltr">user@example.com</span>
+            </span>
+          </button>
+          <div class="user-actions">
+            <button class="icon-btn icon-btn--sidebar" id="settingsBtn" type="button" aria-label="الإعدادات" title="الإعدادات">
+              <span class="icon" data-icon="sliders"></span>
+            </button>
+            <button class="icon-btn icon-btn--sidebar" id="logoutBtn" type="button" aria-label="تسجيل الخروج" title="تسجيل الخروج">
+              <span class="icon" data-icon="logout"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-start">
+          <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="فتح القائمة" aria-controls="sidebar" aria-expanded="false">
+            <span class="icon" data-icon="menu"></span>
+          </button>
+          <div class="topbar-heading">
+            <span class="topbar-eyebrow">مساحة العمل</span>
+            <h2 id="pageTitle">جميع الملاحظات</h2>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="search" id="searchBox">
+            <span class="search-icon icon" data-icon="search"></span>
+            <input type="search" id="searchInput" placeholder="ابحث في ملاحظاتك…" autocomplete="off" aria-label="البحث في الملاحظات">
+            <kbd class="search-kbd">Ctrl K</kbd>
+            <button class="search-clear" id="searchClear" type="button" aria-label="مسح البحث" hidden>
+              <span class="icon" data-icon="x"></span>
+            </button>
+          </div>
+
+          <div class="view-toggle" role="group" aria-label="طريقة العرض">
+            <button class="view-btn is-active" type="button" data-view="grid" aria-label="عرض شبكي" aria-pressed="true">
+              <span class="icon" data-icon="grid"></span>
+            </button>
+            <button class="view-btn" type="button" data-view="list" aria-label="عرض قائمة" aria-pressed="false">
+              <span class="icon" data-icon="list"></span>
+            </button>
+          </div>
+
+          <button class="icon-btn" id="themeBtn" type="button" aria-label="تبديل المظهر" title="تبديل المظهر">
+            <span class="icon" data-icon="moon"></span>
+          </button>
+
+          <button class="avatar avatar--topbar" id="topbarAvatar" type="button" aria-label="الحساب والإعدادات">م</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="content-header">
+          <div class="content-heading">
+            <div class="heading-row">
+              <h1 id="viewTitle">جميع الملاحظات</h1>
+              <span class="title-count" id="viewCount">0</span>
+            </div>
+            <p id="viewSubtitle">أفكارك، مرتّبة كما تحب.</p>
+          </div>
+
+          <div class="content-controls">
+            <label class="sort-control" for="sortSelect">
+              <span class="icon" data-icon="sort"></span>
+              <select id="sortSelect" aria-label="ترتيب الملاحظات">
+                <option value="updated">آخر تحديث</option>
+                <option value="created">تاريخ الإنشاء</option>
+                <option value="title">العنوان (أ — ي)</option>
+              </select>
+              <span class="sort-chevron icon" data-icon="chevron-down"></span>
+            </label>
+            <button class="btn btn-primary btn-new-inline" id="newNoteBtn2" type="button">
+              <span class="icon" data-icon="plus"></span>
+              ملاحظة جديدة
+            </button>
+          </div>
+        </section>
+
+        <div class="active-filter" id="activeFilterBar" hidden>
+          <span class="active-filter-label">تصفية حسب الوسم:</span>
+          <span class="active-filter-chip" id="activeFilterChip"></span>
+          <button class="active-filter-clear" id="clearTagFilter" type="button">مسح التصفية <span class="icon" data-icon="x"></span></button>
+        </div>
+
+        <section class="notes-grid" id="notesGrid" data-view="grid" aria-live="polite"></section>
+
+        <section class="empty-state" id="emptyState" hidden>
+          <div class="empty-illustration">
+            <div class="empty-illustration-glow"></div>
+            <span class="empty-icon icon" id="emptyIcon" data-icon="notes"></span>
+            <span class="empty-spark empty-spark--one"></span>
+            <span class="empty-spark empty-spark--two"></span>
+          </div>
+          <h2 id="emptyTitle">مساحتك جاهزة للأفكار</h2>
+          <p id="emptyText">ابدأ بإنشاء أول ملاحظة، وستجد كل شيء في مكانه دائمًا.</p>
+          <button class="btn btn-primary" id="emptyActionBtn" type="button">
+            <span class="icon" data-icon="plus"></span>
+            إنشاء ملاحظة
+          </button>
+          <div class="empty-hints" id="emptyHints">
+            <span><kbd>N</kbd> ملاحظة جديدة</span>
+            <span><kbd>Ctrl K</kbd> بحث سريع</span>
+          </div>
+        </section>
+
+        <button class="fab" id="fabNewNote" type="button" aria-label="ملاحظة جديدة">
+          <span class="icon" data-icon="plus"></span>
+        </button>
+
+        <footer class="content-footer">
+          <span><span class="icon" data-icon="lock"></span> جميع الملاحظات محفوظة بأمان في حسابك</span>
+          <span>ملاحظاتي <span class="footer-dot"></span> 2026</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Note editor -->
+  <div class="overlay editor-overlay" id="editorOverlay" hidden>
+    <section class="editor-panel" id="editorPanel" role="dialog" aria-modal="true" aria-labelledby="editorEyebrow">
+      <header class="editor-header">
+        <div class="editor-header-start">
+          <span class="editor-eyebrow" id="editorEyebrow">ملاحظة جديدة</span>
+          <span class="editor-status" id="editorStatus" role="status" aria-live="polite">
+            <span class="icon" data-icon="check"></span>
+            <span id="editorStatusText">جاهز</span>
+          </span>
+        </div>
+        <button class="icon-btn" id="editorCloseBtn" type="button" aria-label="إغلاق المحرر">
+          <span class="icon" data-icon="x"></span>
+        </button>
+      </header>
+
+      <div class="editor-meta-row">
+        <span class="editor-date" id="editorDate"></span>
+        <span class="editor-word-count" id="editorWordCount">0 كلمة</span>
+      </div>
+
+      <div class="editor-body">
+        <input class="editor-title" id="noteTitleInput" type="text" placeholder="عنوان الملاحظة" maxlength="120" aria-label="عنوان الملاحظة">
+        <div class="tag-editor" id="tagEditor">
+          <span class="tag-editor-icon icon" data-icon="tag"></span>
+          <span class="tag-editor-chips" id="tagEditorChips"></span>
+          <input type="text" id="tagInput" placeholder="أضف وسمًا…" maxlength="24" aria-label="إضافة وسم">
+        </div>
+        <textarea class="editor-content" id="noteContentInput" placeholder="ابدأ الكتابة… أفكارك هنا في أمان." aria-label="محتوى الملاحظة"></textarea>
+      </div>
+
+      <footer class="editor-footer">
+        <div class="editor-toolbar">
+          <button class="tool-btn" id="editorPinBtn" type="button" aria-pressed="false" title="تثبيت">
+            <span class="icon" data-icon="pin"></span>
+            <span>تثبيت</span>
+          </button>
+          <button class="tool-btn" id="editorFavBtn" type="button" aria-pressed="false" title="إضافة إلى المفضلة">
+            <span class="icon" data-icon="star"></span>
+            <span>مفضّلة</span>
+          </button>
+          <button class="tool-btn" id="editorArchiveBtn" type="button" title="أرشفة">
+            <span class="icon" data-icon="archive"></span>
+            <span>أرشفة</span>
+          </button>
+          <button class="tool-btn tool-btn--danger" id="editorDeleteBtn" type="button" title="نقل إلى سلة المهملات">
+            <span class="icon" data-icon="trash"></span>
+            <span>حذف</span>
+          </button>
+        </div>
+
+        <div class="editor-footer-end">
+          <div class="color-picker" id="colorPicker" role="group" aria-label="لون الملاحظة"></div>
+          <button class="btn btn-primary btn-done" id="editorDoneBtn" type="button">
+            <span class="icon" data-icon="check"></span>
+            تم
+          </button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <!-- Settings -->
+  <div class="overlay" id="settingsOverlay" hidden>
+    <section class="modal modal--settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <header class="modal-header">
+        <div>
+          <span class="modal-eyebrow">مساحتك</span>
+          <h2 id="settingsTitle">الإعدادات</h2>
+        </div>
+        <button class="icon-btn" id="settingsCloseBtn" type="button" aria-label="إغلاق الإعدادات">
+          <span class="icon" data-icon="x"></span>
+        </button>
+      </header>
+
+      <nav class="settings-tabs" role="tablist" aria-label="أقسام الإعدادات">
+        <button class="settings-tab is-active" type="button" role="tab" aria-selected="true" data-settings-tab="profile">
+          <span class="icon" data-icon="user"></span> الحساب
+        </button>
+        <button class="settings-tab" type="button" role="tab" aria-selected="false" data-settings-tab="security">
+          <span class="icon" data-icon="shield"></span> الأمان
+        </button>
+        <button class="settings-tab" type="button" role="tab" aria-selected="false" data-settings-tab="data">
+          <span class="icon" data-icon="database"></span> البيانات
+        </button>
+      </nav>
+
+      <div class="settings-scroll">
+        <section class="settings-pane" data-settings-pane="profile">
+          <div class="profile-card">
+            <span class="avatar avatar--lg" id="settingsAvatar">م</span>
+            <div class="profile-card-text">
+              <h3 id="settingsDisplayName">مستخدم</h3>
+              <span id="settingsDisplayEmail" dir="ltr">user@example.com</span>
+              <span class="profile-meta">عضو منذ <span id="settingsJoined">—</span></span>
+            </div>
+            <span class="profile-chip"><span class="icon" data-icon="shield-check"></span> حساب محمي</span>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>المعلومات الشخصية</h3>
+              <p>الاسم الظاهر في مساحتك الشخصية.</p>
+            </div>
+            <form id="profileForm" class="settings-form">
+              <label class="field">
+                <span class="field-label">الاسم الكامل</span>
+                <span class="field-control">
+                  <span class="field-icon icon" data-icon="user"></span>
+                  <input type="text" id="settingsNameInput" maxlength="60" required>
+                </span>
+                <span class="field-error" data-error-for="settingsNameInput"></span>
+              </label>
+              <label class="field">
+                <span class="field-label">البريد الإلكتروني</span>
+                <span class="field-control field-control--readonly">
+                  <span class="field-icon icon" data-icon="mail"></span>
+                  <input type="email" id="settingsEmailInput" readonly dir="ltr">
+                  <span class="readonly-badge">ثابت</span>
+                </span>
+              </label>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="profileSaveBtn">حفظ التغييرات</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>المظهر</h3>
+              <p>اختر الوضع الذي يناسب عينيك.</p>
+            </div>
+            <div class="theme-options" role="group" aria-label="مظهر الموقع">
+              <button class="theme-option" type="button" data-theme-choice="light">
+                <span class="theme-preview theme-preview--light"><span></span><span></span></span>
+                <span class="theme-option-label"><span class="icon" data-icon="sun"></span> فاتح</span>
+              </button>
+              <button class="theme-option" type="button" data-theme-choice="dark">
+                <span class="theme-preview theme-preview--dark"><span></span><span></span></span>
+                <span class="theme-option-label"><span class="icon" data-icon="moon"></span> داكن</span>
+              </button>
+              <button class="theme-option" type="button" data-theme-choice="system">
+                <span class="theme-preview theme-preview--system"><span></span><span></span></span>
+                <span class="theme-option-label"><span class="icon" data-icon="monitor"></span> حسب النظام</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-pane" data-settings-pane="security" hidden>
+          <div class="settings-callout">
+            <span class="callout-icon icon" data-icon="shield-check"></span>
+            <div>
+              <h3>حماية سحابية</h3>
+              <p>تُخزَّن ملاحظاتك في قاعدة بيانات Supabase مع تفعيل <strong>Row Level Security</strong>. لا يستطيع أي مستخدم قراءة ملاحظات غيره، والاتصال مشفّر عبر TLS.</p>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>تغيير كلمة المرور</h3>
+              <p>حدّث كلمة مرور حسابك عبر Supabase Auth. ستبقى ملاحظاتك كما هي ولن تتأثر.</p>
+            </div>
+            <form id="passwordForm" class="settings-form">
+              <label class="field">
+                <span class="field-label">كلمة المرور الحالية</span>
+                <span class="field-control">
+                  <span class="field-icon icon" data-icon="lock"></span>
+                  <input type="password" id="currentPassword" autocomplete="current-password" placeholder="••••••••" required>
+                  <button class="field-action" type="button" data-reveal="currentPassword" aria-label="إظهار كلمة المرور">
+                    <span class="icon" data-icon="eye"></span>
+                  </button>
+                </span>
+                <span class="field-error" data-error-for="currentPassword"></span>
+              </label>
+              <div class="settings-form-row">
+                <label class="field">
+                  <span class="field-label">كلمة المرور الجديدة</span>
+                  <span class="field-control">
+                    <span class="field-icon icon" data-icon="lock"></span>
+                    <input type="password" id="newPassword" autocomplete="new-password" placeholder="8 أحرف على الأقل" required>
+                    <button class="field-action" type="button" data-reveal="newPassword" aria-label="إظهار كلمة المرور">
+                      <span class="icon" data-icon="eye"></span>
+                    </button>
+                  </span>
+                  <span class="field-error" data-error-for="newPassword"></span>
+                </label>
+                <label class="field">
+                  <span class="field-label">تأكيد كلمة المرور</span>
+                  <span class="field-control">
+                    <span class="field-icon icon" data-icon="lock"></span>
+                    <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="أعد كتابة كلمة المرور" required>
+                    <button class="field-action" type="button" data-reveal="confirmPassword" aria-label="إظهار كلمة المرور">
+                      <span class="icon" data-icon="eye"></span>
+                    </button>
+                  </span>
+                  <span class="field-error" data-error-for="confirmPassword"></span>
+                </label>
+              </div>
+              <div class="settings-warning">
+                <span class="icon" data-icon="alert"></span>
+                لا يمكن استعادة كلمة المرور أو استرداد الملاحظات إذا فقدتها. احتفظ بها في مكان آمن.
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="passwordSaveBtn">تحديث كلمة المرور</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>الجلسة الحالية</h3>
+              <p>تسجيل الخروج ينهي الجلسة على هذا المتصفح. يمكنك تسجيل الدخول مجددًا في أي وقت.</p>
+            </div>
+            <button class="btn btn-ghost btn-session" id="settingsLogoutBtn" type="button">
+              <span class="icon" data-icon="logout"></span> إنهاء الجلسة الآن
+            </button>
+          </div>
+        </section>
+
+        <section class="settings-pane" data-settings-pane="data" hidden>
+          <div class="data-stats">
+            <div class="data-stat"><strong id="dataNotesCount">0</strong><span>ملاحظة</span></div>
+            <div class="data-stat"><strong id="dataTagsCount">0</strong><span>وسمًا</span></div>
+            <div class="data-stat"><strong id="dataStorageSize">0 KB</strong><span>حجم البيانات</span></div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>نسخة احتياطية</h3>
+              <p>صدّر ملاحظاتك بصيغة JSON. النسخة المصدّرة غير مشفّرة، لذا احفظها في مكان آمن.</p>
+            </div>
+            <button class="btn btn-secondary" id="exportBtn" type="button">
+              <span class="icon" data-icon="download"></span> تنزيل نسخة احتياطية
+            </button>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-head">
+              <h3>معلومات التخزين</h3>
+              <p>يعمل ملاحظاتي مع قاعدة بيانات Supabase سحابية. تظهر ملاحظاتك في أي جهاز بعد تسجيل الدخول بالحساب نفسه.</p>
+            </div>
+            <ul class="settings-info-list">
+              <li><span class="icon" data-icon="check-circle"></span> بياناتك محفوظة في Supabase وتُزامَن بين أجهزتك بعد تسجيل الدخول.</li>
+              <li><span class="icon" data-icon="check-circle"></span> كل مستخدم يرى ملاحظاته فقط بفضل سياسات RLS.</li>
+              <li><span class="icon" data-icon="check-circle"></span> يمكنك تصدير نسخة احتياطية في أي وقت.</li>
+            </ul>
+          </div>
+
+          <div class="settings-group settings-group--danger">
+            <div class="settings-group-head">
+              <h3>حذف الحساب</h3>
+              <p>سيتم حذف حسابك وجميع ملاحظاتك نهائيًا من قاعدة البيانات السحابية. لا يمكن التراجع عن هذه الخطوة.</p>
+            </div>
+            <button class="btn btn-danger-soft" id="deleteAccountBtn" type="button">
+              <span class="icon" data-icon="trash"></span> حذف الحساب نهائيًا
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <!-- Confirm dialog -->
+  <div class="overlay" id="confirmOverlay" hidden>
+    <section class="modal modal--confirm" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="confirm-icon" id="confirmIcon"><span class="icon" data-icon="alert"></span></div>
+      <h3 id="confirmTitle">هل أنت متأكد؟</h3>
+      <p id="confirmText"></p>
+      <div class="confirm-extra" id="confirmExtra" hidden></div>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirmCancel" type="button">إلغاء</button>
+        <button class="btn btn-danger" id="confirmOk" type="button">تأكيد</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
