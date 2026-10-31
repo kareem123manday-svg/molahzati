@@ -2,6 +2,8 @@
 
 تطبيق ملاحظات عربي كامل بواجهة RTL احترافية، يعمل في المتصفح ويتزامن مع قاعدة بيانات **Supabase** سحابية. يمكن لكل مستخدم إنشاء حساب وتسجيل الدخول من أي جهاز، ولا يصل إلى ملاحظات غيره بفضل سياسات عزل الصفوف (Row Level Security).
 
+**النسخة المباشرة:** https://kareem123manday-svg.github.io/molahzati/
+
 ## التشغيل
 
 من داخل مجلد المشروع:
@@ -28,6 +30,7 @@ http://localhost:3000
 2. انتقل إلى **SQL Editor** ثم **New query**.
 3. انسخ محتوى الملف [`supabase-schema.sql`](supabase-schema.sql) والصقه، ثم اضغط **Run**.
 4. من **Authentication → URL Configuration** أضف عنوان التطبيق إلى **Site URL** و**Redirect URLs**، مثل:
+   - `https://kareem123manday-svg.github.io/molahzati/`
    - `http://localhost:3000`
    - عنوان النشر الفعلي عند رفعه.
 5. تأكد من أن تسجيل الدخول بالبريد وكلمة المرور مفعّل من **Authentication → Providers → Email**.
